@@ -1,7 +1,7 @@
 import hashlib
 import random
 
-# Hàm hash SHA-1 rút gọn còn m-bit
+
 def hash_id(value, m=6):
     return int(hashlib.sha1(value.encode()).hexdigest(), 16) % (2 ** m)
 
@@ -16,7 +16,7 @@ class Node:
     def __repr__(self):
         return f"Node({self.id})"
 
-    # Tìm successor của 1 key
+   
     def find_successor(self, key):
         if self == self.successor:
             return self
@@ -26,14 +26,12 @@ class Node:
         node = self.closest_preceding_node(key)
         return node.find_successor(key)
 
-    # Tìm node gần key nhất trong finger table
     def closest_preceding_node(self, key):
         for finger in reversed(self.finger):
             if finger and self.id < finger.id < key:
                 return finger
         return self
 
-    # Join vòng từ node có sẵn
     def join(self, existing_node):
         if existing_node:
             self.init_finger_table(existing_node)
@@ -49,7 +47,6 @@ class Node:
             start = (self.id + 2 ** i) % (2 ** self.m)
             self.finger[i] = existing_node.find_successor(start)
 
-# Demo tạo vòng
 def create_chord_ring(num_nodes=5, m=6):
     nodes = []
     for i in range(num_nodes):
@@ -61,3 +58,4 @@ def create_chord_ring(num_nodes=5, m=6):
             node.join(None)
         nodes.append(node)
     return nodes
+
